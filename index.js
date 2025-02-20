@@ -28,6 +28,7 @@ async function run() {
 
   const db = client.db('task-manager');
   const usersCollections = db.collection('users');
+  const taskCollections = db.collection('tasks');
 
 
 
@@ -41,6 +42,20 @@ async function run() {
         const result = await usersCollections.insertOne(user);
         res.send(result);
       });
+
+      //task related APi Start 
+    app.post('/tasks', async(req,res) =>{
+       const taskList = req.body;
+       const result = await taskCollections.insertOne(taskList);
+       res.send(result)
+    })
+
+    app.get("/tasks/:email", async(req,res)=>{
+      const email = req.params.email;
+      const query = {email: email};
+      const result = await taskCollections.find(query).toArray();
+      res.send(result)
+    })
 
 
 
