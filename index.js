@@ -63,7 +63,25 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await taskCollections.findOne(query);
       res.send(result);
-    });
+     });
+
+     app.put('/taskUpdate/:id', async(req,res)=>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)};
+      const updatedTask = req.body;
+      const taskUpdateList = {
+        $set:{
+          title: updatedTask.title,
+          description:updatedTask.description,
+          category: updatedTask.category,
+        }
+      }
+      const result = await taskCollections.updateOne(filter,taskUpdateList);
+      res.send(result)
+    })
+
+
+
 
 
      // delete assingment card
