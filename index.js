@@ -92,6 +92,32 @@ async function run() {
       res.send(result);
     });
 
+    app.put('/tasks/reorder', async (req, res) => {
+      const { tasks, email } = req.body;
+    
+      try {
+        // Create an array of promises for updating tasks
+        const updatePromises = tasks.map((task) => {
+          return taskCollections.updateOne(
+            { _id: new ObjectId(task._id) }, // Convert _id to ObjectId
+            { $set: { category: task.category } } // Use $set to update specific fields
+          );
+        });
+    
+        // Wait for all update promises to resolve
+        await Promise.all(updatePromises);
+    
+        res.status(200).send({ message: 'Tasks reordered successfully' });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ error: 'Failed to reorder tasks' });
+      }
+    });
+
+
+
+    
+
 
 
 
